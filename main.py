@@ -102,6 +102,7 @@ clf = xgb.XGBClassifier(
 
 testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
+
 for k in xrange(len(testX_file_paths)):
     testX_pd = pd.read_csv(testX_file_paths[k])
 
@@ -122,6 +123,8 @@ for k in xrange(len(testX_file_paths)):
             ed = i
             break
     t1, t2 = [st+1], [ed+1]
+    mid_result = pd.DataFrame({'predictions':predictions})
+    mid_result.to_csv('test_'+str(k)+'mid_result.csv',index=True)
     sub = pd.DataFrame({'t1':t1,'t2':t2})
     save_path = 'test_'+str(k)+'_submission.csv'
     sub.to_csv(save_path, index=False)
