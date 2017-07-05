@@ -12,6 +12,8 @@ trainY_file_paths = ['../data/train/12/12_failureInfo.csv','../data/train/23/23_
 
 testX_file_path = '../data/test/26/26_data.csv'
 
+testX_pd = pd.read_csv(testX_file_path)
+
 trainX_concate = np.array([])
 trainY_concate = np.array([])
 
@@ -87,3 +89,26 @@ res = xgb.cv(param,dtrain,num_boost_round,n_fold,metrics={'error'},seed=0,
                       xgb.callback.early_stop(3)])
 print res
 '''
+
+clf = xgb.XGBClassifier(
+    #learning_rate = 0.02,
+ n_estimators= 500,
+ max_depth= 5,
+ min_child_weight= 2,
+ #gamma=1,
+ gamma=0.9,                        
+ subsample=0.8,
+ colsample_bytree=0.8,
+ objective= 'binary:logistic',
+ nthread= -1,
+ scale_pos_weight=1).fit(trainX_concate, trainY_concate)
+
+testX = testX_pd.drop(['time'], axis=1).values
+
+predictions = clf.predict(testX)
+
+# Generate Submission File 
+StackingSubmission = pd.DataFrame({'time': testX_pd['time']],
+                            'predictions': predictions})
+StackingSubmission.to_csv("submission.csv", index=False)
+print 'results saved to .csv successfully!'
