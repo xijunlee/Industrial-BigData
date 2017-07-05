@@ -10,10 +10,6 @@ import pdb
 trainX_file_paths = ['../data/train/12/12_data.csv','../data/train/23/23_data.csv','../data/train/29/29_data.csv']
 trainY_file_paths = ['../data/train/12/12_failureInfo.csv','../data/train/23/23_failureInfo.csv','../data/train/29/29_failureInfo.csv']
 
-testX_file_path = '../data/test/26/26_data.csv'
-
-testX_pd = pd.read_csv(testX_file_path)
-
 trainX_concate = np.array([])
 trainY_concate = np.array([])
 
@@ -104,12 +100,30 @@ clf = xgb.XGBClassifier(
  nthread= -1,
  scale_pos_weight=1).fit(trainX_concate, trainY_concate)
 
-testX = testX_pd.drop(['time'], axis=1).values
+testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
-print 'predicting ...'
-predictions = clf.predict(testX)
+for k in xrange(len(testX_file_paths)):
+    testX_pd = pd.read_csv(testX_file_paths[i])
 
-# Generate Submission File 
-Submission = pd.DataFrame({'predictions': predictions})
-Submission.to_csv("Submission.csv", index=True)
-print 'results saved to .csv successfully!'
+    testX = testX_pd.drop(['time'], axis=1).values
+
+    print 'predicting the %d th test dataset ...'%k
+    predictions = clf.predict(testX)
+
+    print 'generating submission file of the %d test dataset ...'%k
+    submission_file_path
+    # Generate Submission File 
+    st, ed = -1, -1
+    for i in xrange(len(predictions)):
+        if predictions[i] == 1:
+            st = i
+            break
+    for i in xrange(len(predictions)-1,-1,-1):
+        if predictions[i] == 1:
+            ed = i
+            break
+    t1, t2 = [st+1], [ed+1]
+    sub = pd.DataFrame({'t1':t1,'t2':t2})
+    save_path = 'test_'+str(k)+'_submission.csv'
+    sub.to_csv(save_path, index=False)
+    print save_path + 'result has been saved successfully!'
