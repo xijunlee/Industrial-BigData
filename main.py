@@ -61,7 +61,6 @@ for k in xrange(3):
             trainY.append(1)
         else:
             trainY.append(0)
-    pdb.set_trace()
     trainY = np.array(trainY)
 
     trainX_df = trainX_df.drop(['time'],axis=1)
@@ -90,6 +89,8 @@ res = xgb.cv(param,dtrain,num_boost_round,n_fold,metrics={'error'},seed=0,
 print res
 '''
 
+print 'training xgbclassfier ...'
+
 clf = xgb.XGBClassifier(
     #learning_rate = 0.02,
  n_estimators= 500,
@@ -105,10 +106,10 @@ clf = xgb.XGBClassifier(
 
 testX = testX_pd.drop(['time'], axis=1).values
 
+print 'predicting ...'
 predictions = clf.predict(testX)
 
 # Generate Submission File 
-StackingSubmission = pd.DataFrame({'time': testX_pd['time']],
-                            'predictions': predictions})
-StackingSubmission.to_csv("submission.csv", index=False)
+Submission = pd.DataFrame({'predictions': predictions})
+Submission.to_csv("Submission.csv", index=True)
 print 'results saved to .csv successfully!'
