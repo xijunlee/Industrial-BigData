@@ -103,7 +103,7 @@ clf = xgb.XGBClassifier(
 testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
 for k in xrange(len(testX_file_paths)):
-    testX_pd = pd.read_csv(testX_file_paths[i])
+    testX_pd = pd.read_csv(testX_file_paths[k])
 
     testX = testX_pd.drop(['time'], axis=1).values
 
@@ -111,7 +111,6 @@ for k in xrange(len(testX_file_paths)):
     predictions = clf.predict(testX)
 
     print 'generating submission file of the %d test dataset ...'%k
-    submission_file_path
     # Generate Submission File 
     st, ed = -1, -1
     for i in xrange(len(predictions)):
