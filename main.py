@@ -56,17 +56,18 @@ for k in xrange(3):
     
     if positive_st != -1:
         
+        '''
         phase1 = np.linspace(0,0.5*100,positive_st)
         phase2 = np.array([0.5*100 for i in xrange(highRisk_st-positive_st)])
         phase3 = np.array([0.8*100 for i in xrange(highRisk_ed-highRisk_st)])
         phase4 = np.linspace(0.8*100,1*100,trainX_df.shape[0]-highRisk_ed)
-        
         '''
+        
         phase1 = np.array([0.2*100 for i in xrange(positive_st)])
         phase2 = np.array([0.5*100 for i in xrange(highRisk_st-positive_st)])
         phase3 = np.array([0.8*100 for i in xrange(highRisk_ed-highRisk_st)])
         phase4 = np.array([1 for i in xrange(trainX_df.shape[0]-highRisk_ed)])
-        '''
+        
 
         trainY = np.concatenate((phase1,phase2,phase3,phase4), axis=0)
     else:
@@ -117,7 +118,7 @@ print res
 
 print 'training xgbclassfier ...'
 
-nComponent = 20
+nComponent = 15
 pca = PCA(n_components=nComponent)
 pca.fit(trainX_concate)
 trainX_concate = pca.transform(trainX_concate)
