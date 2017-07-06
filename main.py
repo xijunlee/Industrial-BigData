@@ -17,11 +17,19 @@ trainX_concate = np.array([])
 trainY_concate = np.array([])
 
 def feature_processing(df):
-    df['f1']=(df['wind_speed']+df['generator_speed']+df['power'])/3.0
-    df['f2'] = (df['wind_direction']+df['wind_direction_mean'])/2.0
-    df['f3'] = (df['pitch1_angle']+df['pitch2_angle']+df['pitch3_angle'])/3.0
-    df['f4'] = (df['pitch1_speed']+df['pitch2_speed']+df['pitch3_speed'])/3.0
-    df['f5'] = (df['pitch1_moto_tmp']+df['pi'])
+    #df['f1']=(df['wind_speed']+df['generator_speed']+df['power'])/3.0
+    df['wind_direction_avg'] = (df['wind_direction']+df['wind_direction_mean'])/2.0
+    df['pitch_angle_avg'] = (df['pitch1_angle']+df['pitch2_angle']+df['pitch3_angle'])/3.0
+    df['pitch_speed_avg'] = (df['pitch1_speed']+df['pitch2_speed']+df['pitch3_speed'])/3.0
+    df['pitch_moto_tmp_avg'] = (df['pitch1_moto_tmp']+df['pitch2_moto_tmp']+df['pitch3_moto_tmp'])/3.0
+    df['tmp_avg'] = (df['environment_tmp']+df['int_tmp'])/2.0
+    df['pitch_ng5_tmp_avg'] = (df['pitch1_ng5_tmp']+df['pitch2_ng5_tmp']+df['pitch3_ng5_tmp'])/3.0
+    drop_labels=['wind_direction','wind_direction_mean','pitch1_angle','pitch2_angle','pitch3_angle','pitch1_speed','pitch2_speed','pitch3_speed',
+    'pitch1_moto_tmp','pitch2_moto_tmp','pitch3_moto_tmp','environment_tmp','int_tmp','pitch1_ng5_tmp','pitch2_ng5_tmp','pitch3_ng5_tmp','time','group']
+    df = df.drop(drop_labels,axis=1)
+    data = df.values
+    data = normalize(data,norm='l2',axis=1)
+    return data
 
 for k in xrange(3):
     print 'Processing the %d th training dataset...' %(k)
@@ -94,10 +102,7 @@ for k in xrange(3):
     '''
    
     # Feature engineering
-
-    trainX_df = trainX_df.drop(['time'],axis=1)
-    trainX = trainX_df.values
-    trainX = normalize(trainX,norm='l2',axis=1)
+    trainX = feature_processing(trainX_df)
     
     print trainX,trainY
     print trainX.shape, trainY.shape
@@ -128,7 +133,7 @@ print res
 
 print 'training xgbclassfier ...'
 
-nComponent = 15
+nComponent = 10
 pca = PCA(n_components=nComponent)
 pca.fit(trainX_concate)
 trainX_concate = pca.transform(trainX_concate)
@@ -152,7 +157,8 @@ testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 for k in xrange(len(testX_file_paths)):
     testX_pd = pd.read_csv(testX_file_paths[k])
 
-    testX = testX_pd.drop(['time'], axis=1).values
+    # Feature processing
+    testX = feature_processing(testX_pd)
 
     print 'Predicting the %d th test dataset ...'%k
     
@@ -178,4 +184,4 @@ for k in xrange(len(testX_file_paths)):
     sub = pd.DataFrame({'t1':t1,'t2':t2})
     save_path = 'test_'+str(k)+'_submission.csv'
     sub.to_csv(save_path, index=False)
-    print save_path + 'result has been saved successfully!'
+    print save_path + ' result has been saved successfully!'
