@@ -16,8 +16,15 @@ trainY_file_paths = ['../data/train/12/12_failureInfo.csv','../data/train/23/23_
 trainX_concate = np.array([])
 trainY_concate = np.array([])
 
+def feature_processing(df):
+    df['f1']=(df['wind_speed']+df['generator_speed']+df['power'])/3.0
+    df['f2'] = (df['wind_direction']+df['wind_direction_mean'])/2.0
+    df['f3'] = (df['pitch1_angle']+df['pitch2_angle']+df['pitch3_angle'])/3.0
+    df['f4'] = (df['pitch1_speed']+df['pitch2_speed']+df['pitch3_speed'])/3.0
+    df['f5'] = (df['pitch1_moto_tmp']+df['pi'])
+
 for k in xrange(3):
-    print 'processing the %d th training dataset...' %(k)
+    print 'Processing the %d th training dataset...' %(k)
     trainX_df = pd.read_csv(trainX_file_paths[k])
     trainY_df = pd.read_csv(trainY_file_paths[k])
     
@@ -32,6 +39,7 @@ for k in xrange(3):
     t1 = pd.Timestamp(trainY_df.iat[0,2])
     t0 = pd.Timestamp(trainY_df.iat[0,1])
 
+    # labeling the timestamps
     positive_st, positive_ed, highRisk_st, highRisk_ed = -1, -1, -1, -1
 
     for i in xrange(trainX_df.shape[0]):
@@ -84,7 +92,9 @@ for k in xrange(3):
             trainY.append(0)
     trainY = np.array(trainY)
     '''
-    
+   
+    # Feature engineering
+
     trainX_df = trainX_df.drop(['time'],axis=1)
     trainX = trainX_df.values
     trainX = normalize(trainX,norm='l2',axis=1)
@@ -144,14 +154,14 @@ for k in xrange(len(testX_file_paths)):
 
     testX = testX_pd.drop(['time'], axis=1).values
 
-    print 'predicting the %d th test dataset ...'%k
+    print 'Predicting the %d th test dataset ...'%k
     
     pca = PCA(n_components=nComponent)
     pca.fit(testX)
     testX = pca.transform(testX)
     predictions = clf.predict(testX)
 
-    print 'generating submission file of the %d test dataset ...'%k
+    print 'Generating submission file of the %d test dataset ...'%k
     # Generate Submission File 
     st, ed = -1, -1
     for i in xrange(len(predictions)):
