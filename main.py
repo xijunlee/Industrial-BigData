@@ -54,7 +54,10 @@ for k in xrange(3):
     trainY = []
     for i in xrange(trainX_df.shape[0]):
         if i >= positive_st and i <= positive_ed:
-            trainY.append(1)
+            if i >= highRisk_st:
+                trainY.append(2)
+            else:
+                trainY.append(1)
         else:
             trainY.append(0)
     trainY = np.array(trainY)
@@ -96,7 +99,7 @@ clf = xgb.XGBClassifier(
  gamma=0.9,                        
  subsample=0.8,
  colsample_bytree=0.8,
- objective= 'binary:logistic',
+ objective= 'reg:logistic',
  nthread= -1,
  scale_pos_weight=1).fit(trainX_concate, trainY_concate)
 
