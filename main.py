@@ -104,8 +104,8 @@ for k in xrange(3):
     # Feature engineering
     trainX = feature_processing(trainX_df)
     
-    print trainX,trainY
-    print trainX.shape, trainY.shape
+    #print trainX,trainY
+    #print trainX.shape, trainY.shape
 
     if k == 0:
         trainX_concate, trainY_concate = trainX, trainY
@@ -131,7 +131,7 @@ res = xgb.cv(param,dtrain,num_boost_round,n_fold,metrics={'error'},seed=0,
 print res
 '''
 
-print 'training xgbclassfier ...'
+print 'Training xgbclassfier ...'
 
 nComponent = 10
 pca = PCA(n_components=nComponent)
