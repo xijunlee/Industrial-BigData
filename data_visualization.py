@@ -1,14 +1,34 @@
 import pandas as pd
 import numpy as np
 import seaborn as sns
-from sklearn.decomposition import PCA
-
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from pylab import savefig
 
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import normalize
+file_paths = ['12_feature_processing_result.csv','23_feature_processing_result.csv','29_feature_processing_result.csv']
 
+dfs = []
+
+for file_path in file_paths:
+	dfs.append(pd.read_csv(file_path))
+
+attrs0 = dfs[0].columns
+attrs1 = dfs[1].columns
+attrs2 = dfs[2].columns
+
+for i in xrange(len(attrs0)):
+	save_name = attrs0[i][3:] + '.png'
+	series0 = dfs[0][attrs0[i]]
+	series1 = dfs[1][attrs1[i]]
+	series2 = dfs[2][attrs2[i]]
+	df = pd.DataFrame({attrs0[i]:series0,
+					   attrs1[i]:series1,
+					   attrs2[i]:series2,
+		})
+	df.plot(subplots=True, figsize(8,8),sharex=False,layout=(3,1))
+	savefig(save_name)
+
+'''
 file_path = './data/train/23/23_data.csv'
 data_df = pd.read_csv(file_path)
 time_series = data_pd.time
@@ -23,6 +43,7 @@ corrmat = data_pd.corr()
 f, ax = plt.subplots(figsize=(12,9))
 sns.heatmap(corrmat,square=True)
 plt.show()
+'''
 '''
 pca = PCA(n_components=3)
 pca.fit(data)
