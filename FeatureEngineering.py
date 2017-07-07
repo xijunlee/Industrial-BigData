@@ -37,7 +37,7 @@ def feature_processing_df(df):
     return df
 
 if __name__ == '__main__':
-    file_path = '../data/train/12/12_data.csv'
+    file_path = '../data/train/29/29_data.csv'
     data_df = pd.read_csv(file_path)
     data_df = feature_processing_df(data_df)
     print data_df.head()
