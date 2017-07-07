@@ -34,13 +34,14 @@ def feature_processing_df(df):
     drop_labels=['wind_direction','wind_direction_mean','pitch1_angle','pitch2_angle','pitch3_angle','pitch1_speed','pitch2_speed','pitch3_speed',
     'pitch1_moto_tmp','pitch2_moto_tmp','pitch3_moto_tmp','environment_tmp','int_tmp','pitch1_ng5_tmp','pitch2_ng5_tmp','pitch3_ng5_tmp']
     df = df.drop(drop_labels,axis=1)
-    return data
+    return df
 
 if __name__ == '__main__':
-    file_path = './data/train/23/23_data.csv'
+    file_path = '../data/train/23/23_data.csv'
     data_df = pd.read_csv(file_path)
     data_df = feature_processing_df(data_df)
     data_df.to_csv('feature_processing_result.csv',index=False)
+    print 'Feature processing result has been saved!'
 
 
 
