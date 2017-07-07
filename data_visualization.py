@@ -25,7 +25,7 @@ for i in xrange(len(attrs0)):
 					   attrs1[i]:series1,
 					   attrs2[i]:series2,
 		})
-	df.plot(subplots=True, figsize(8,8),sharex=False,layout=(3,1))
+	df.plot(subplots=True, figsize=(8,8),sharex=False,layout=(3,1))
 	savefig(save_name)
 
 '''
