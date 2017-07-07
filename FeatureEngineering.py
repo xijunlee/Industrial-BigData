@@ -40,6 +40,7 @@ if __name__ == '__main__':
     file_path = '../data/train/23/23_data.csv'
     data_df = pd.read_csv(file_path)
     data_df = feature_processing_df(data_df)
+    print data_df.head()
     data_df.to_csv('feature_processing_result.csv',index=False)
     print 'Feature processing result has been saved!'
 
