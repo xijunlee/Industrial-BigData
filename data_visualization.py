@@ -10,9 +10,9 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
 
 file_path = './data/train/23/23_data.csv'
-data_pd = pd.read_csv(file_path)
+data_df = pd.read_csv(file_path)
 time_series = data_pd.time
-data_pd = data_pd.drop(['time'],axis=1)
+data_df = data_df.drop(['time'],axis=1)
 rename_labels = ['f'+str(i) for i in xrange(1,28)]
 #data = normalize(data_pd.values,norm='l2',axis=0)
 data_pd.columns = rename_labels
