@@ -54,7 +54,9 @@ for k in xrange(3):
         if trainX_df.iat[i,0] >= t0:
             positive_ed = i
             break
-    
+   
+    print 'positive_st,highRisk_st,highRisk_ed,positive_ed',positive_st,highRisk_st,highRisk_ed,positive_ed
+
     if positive_st != -1:
         
         '''

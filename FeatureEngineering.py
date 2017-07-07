@@ -32,17 +32,19 @@ def feature_processing_df(df):
     df['tmp_avg'] = (df['environment_tmp']+df['int_tmp'])/2.0
     df['pitch_ng5_tmp_avg'] = (df['pitch1_ng5_tmp']+df['pitch2_ng5_tmp']+df['pitch3_ng5_tmp'])/3.0
     drop_labels=['wind_direction','wind_direction_mean','pitch1_angle','pitch2_angle','pitch3_angle','pitch1_speed','pitch2_speed','pitch3_speed',
-    'pitch1_moto_tmp','pitch2_moto_tmp','pitch3_moto_tmp','environment_tmp','int_tmp','pitch1_ng5_tmp','pitch2_ng5_tmp','pitch3_ng5_tmp']
+    'pitch1_moto_tmp','pitch2_moto_tmp','pitch3_moto_tmp','environment_tmp','int_tmp','pitch1_ng5_tmp','pitch2_ng5_tmp','pitch3_ng5_tmp','group','time']
     df = df.drop(drop_labels,axis=1)
     return df
 
 if __name__ == '__main__':
-    file_path = '../data/train/29/29_data.csv'
-    data_df = pd.read_csv(file_path)
-    data_df = feature_processing_df(data_df)
-    print data_df.head()
-    data_df.to_csv('feature_processing_result.csv',index=False)
-    print 'Feature processing result has been saved!'
+    file_paths = ['../data/train/12/12_data.csv','../data/train/23/23_data.csv','../data/train/29/29_data.csv']
+    save_paths = ['12_feature_processing_result.csv','23_feature_processing_result.csv','29_feature_processing_result.csv']
+    for i in xrange(3):
+        data_df = pd.read_csv(file_paths[i])
+        data_df = feature_processing_df(data_df)
+        print data_df.shape
+        data_df.to_csv(save_paths[i],index=False)
+        print save_paths[i] + ' has been saved!'
 
 
 
