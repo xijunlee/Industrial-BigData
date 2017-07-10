@@ -156,6 +156,7 @@ for k in xrange(len(testX_file_paths)):
 
     print 'Generating submission file of the %d test dataset ...'%k
     # Generate Submission File 
+    '''
     st, ed = -1, -1
     for i in xrange(len(predictions)):
         if predictions[i] >= 50.0:
@@ -166,6 +167,24 @@ for k in xrange(len(testX_file_paths)):
             ed = i
             break
     t2, t1 = [st+1], [ed+1]
+    '''
+    f = [0 for i in xrange(len(predictions))]
+    f[0] += predictions[0]
+    for i in xrange(1,len(predictions)):
+        f[i] = f[i-1] + predictions[i]
+
+    L, op, t1, t2 = len(predictions), -1, -1, -1
+    for i in xrange(L):
+        for j in xrange(i+1,L):
+            l = j -i
+            c = (f[j] - f[i])*1.0
+            rho = c/l
+            l1 = l*100.0/L
+            if op < rho + l1:
+                t1, t2 = j, i
+
+    t1, t2 = [t1], [t2]
+
     mid_result = pd.DataFrame({'predictions':predictions})
     mid_result.to_csv('test_'+str(k)+'mid_result.csv',index=True)
     sub = pd.DataFrame({'t1':t1,'t2':t2})
