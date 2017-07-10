@@ -18,6 +18,7 @@ attrs2 = dfs[2].columns
 
 for i in xrange(len(attrs0)):
 	save_name = attrs0[i][3:] + '.png'
+	print 'Plotting ' + save_name + ' ...'
 	series0 = dfs[0][attrs0[i]]
 	series1 = dfs[1][attrs1[i]]
 	series2 = dfs[2][attrs2[i]]
