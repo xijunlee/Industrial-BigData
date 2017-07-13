@@ -239,7 +239,7 @@ for k in xrange(len(testX_file_paths)):
     pca = PCA(n_components=nComponent)
     pca.fit(testX)
     testX = pca.transform(testX)
-    predictions = clf1.predict(testX)
+    predictions = clf2.predict(testX)
 
     print 'Generating submission file of the %d test dataset ...'%k
     # Generate Submission File 
