@@ -13,8 +13,13 @@ from FeatureEngineering import feature_processing
 trainX_file_paths = ['../data/train/12/12_data.csv','../data/train/23/23_data.csv','../data/train/29/29_data.csv']
 trainY_file_paths = ['../data/train/12/12_failureInfo.csv','../data/train/23/23_failureInfo.csv','../data/train/29/29_failureInfo.csv']
 
-trainX_concate = np.array([])
-trainY_concate = np.array([])
+trainX_concate1 = np.array([])
+trainY_concate1 = np.array([])
+
+trainX_concate2 = np.array([])
+trainY_concate2 = np.array([])
+
+trainXs, trainYs = [], []
 
 for k in xrange(3):
     print 'Processing the %d th training dataset...' %(k)
@@ -74,7 +79,7 @@ for k in xrange(3):
 
         trainY = np.concatenate((phase1,phase2,phase3,phase4), axis=0)
     else:
-        trainY = np.array([40 for i in xrange(trainX_df.shape[0])])
+        trainY = np.array([10 for i in xrange(trainX_df.shape[0])])
     '''
     trainY = []
     for i in xrange(trainX_df.shape[0]):
@@ -90,16 +95,28 @@ for k in xrange(3):
    
     # Feature engineering
     trainX = feature_processing(trainX_df)
+
+    trainXs.append(trainX)
+    trainYs.append(trainY)
     
     #print trainX,trainY
     #print trainX.shape, trainY.shape
 
+    '''
     if k == 0:
         trainX_concate, trainY_concate = trainX, trainY
     else:
         trainX_concate = np.concatenate((trainX_concate,trainX), axis=0)
         trainY_concate = np.concatenate((trainY_concate,trainY), axis=0)
     print trainX_concate.shape, trainY_concate.shape
+    '''
+
+trainX_concate1 = np.concatenate((trainXs[0],trainXs[1]), axis=0)
+trainY_concate1 = np.concatenate((trainYs[0],trainYs[1]), axis=0)
+
+
+trainX_concate2 = np.concatenate((trainXs[0],trainXs[2]), axis=0)
+trainY_concate2 = np.concatenate((trainYs[0],trainYs[2]), axis=0)
 
 
 '''
@@ -118,14 +135,16 @@ res = xgb.cv(param,dtrain,num_boost_round,n_fold,metrics={'error'},seed=0,
 print res
 '''
 
-print 'Training xgbclassfier ...'
-
+print 'PCA processing ...'
 nComponent = 10
 pca = PCA(n_components=nComponent)
-pca.fit(trainX_concate)
-trainX_concate = pca.transform(trainX_concate)
+pca.fit(trainX_concate1)
+trainX_concate1 = pca.transform(trainX_concate1)
+pca.fit(trainX_concate2)
+trainX_concate2 = pca.transform(trainX_concate2)
 
-clf = xgb.XGBClassifier(
+print 'Training 1st xgbclassfier ...'
+clf1 = xgb.XGBClassifier(
     #learning_rate = 0.02,
  n_estimators= 500,
  max_depth= 5,
@@ -136,11 +155,25 @@ clf = xgb.XGBClassifier(
  colsample_bytree=0.8,
  objective= 'reg:logistic',
  nthread= -1,
- scale_pos_weight=1).fit(trainX_concate, trainY_concate)
+ scale_pos_weight=1).fit(trainX_concate1, trainY_concate1)
+
+print 'Training 2nd xgbclassfier ...'
+clf2 = xgb.XGBClassifier(
+    #learning_rate = 0.02,
+ n_estimators= 500,
+ max_depth= 5,
+ min_child_weight= 2,
+ #gamma=1,
+ gamma=0.9,                        
+ subsample=0.8,
+ colsample_bytree=0.8,
+ objective= 'reg:logistic',
+ nthread= -1,
+ scale_pos_weight=1).fit(trainX_concate2, trainY_concate2)
 
 testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
-
+print 'The 1st classifier predicting ...'
 for k in xrange(len(testX_file_paths)):
     testX_pd = pd.read_csv(testX_file_paths[k])
 
@@ -152,11 +185,11 @@ for k in xrange(len(testX_file_paths)):
     pca = PCA(n_components=nComponent)
     pca.fit(testX)
     testX = pca.transform(testX)
-    predictions = clf.predict(testX)
+    predictions = clf1.predict(testX)
 
     print 'Generating submission file of the %d test dataset ...'%k
     # Generate Submission File 
-    '''
+    
     st, ed = -1, -1
     for i in xrange(len(predictions)):
         if predictions[i] >= 50.0:
@@ -167,6 +200,8 @@ for k in xrange(len(testX_file_paths)):
             ed = i
             break
     t2, t1 = [st+1], [ed+1]
+    
+
     '''
     f = [0 for i in xrange(len(predictions))]
     f[0] += predictions[0]
@@ -184,10 +219,64 @@ for k in xrange(len(testX_file_paths)):
                 t1, t2 = j, i
 
     t1, t2 = [t1], [t2]
-
+    '''
     mid_result = pd.DataFrame({'predictions':predictions})
-    mid_result.to_csv('test_'+str(k)+'mid_result.csv',index=True)
+    mid_result.to_csv('test_'+str(k)+'mid_result1.csv',index=True)
     sub = pd.DataFrame({'t1':t1,'t2':t2})
-    save_path = 'test_'+str(k)+'_submission.csv'
+    save_path = 'test_'+str(k)+'_submission1.csv'
     sub.to_csv(save_path, index=False)
-    print save_path + ' result has been saved successfully!'
+    print save_path + ' result 1 has been saved successfully!'
+
+print 'The 2nd classifier predicting ...'
+for k in xrange(len(testX_file_paths)):
+    testX_pd = pd.read_csv(testX_file_paths[k])
+
+    # Feature processing
+    testX = feature_processing(testX_pd)
+
+    print 'Predicting the %d th test dataset ...'%k
+    
+    pca = PCA(n_components=nComponent)
+    pca.fit(testX)
+    testX = pca.transform(testX)
+    predictions = clf1.predict(testX)
+
+    print 'Generating submission file of the %d test dataset ...'%k
+    # Generate Submission File 
+    
+    st, ed = -1, -1
+    for i in xrange(len(predictions)):
+        if predictions[i] >= 50.0:
+            st = i
+            break
+    for i in xrange(len(predictions)-1,-1,-1):
+        if predictions[i] <= 80.0:
+            ed = i
+            break
+    t2, t1 = [st+1], [ed+1]
+    
+
+    '''
+    f = [0 for i in xrange(len(predictions))]
+    f[0] += predictions[0]
+    for i in xrange(1,len(predictions)):
+        f[i] = f[i-1] + predictions[i]
+
+    L, op, t1, t2 = len(predictions), -1, -1, -1
+    for i in xrange(L):
+        for j in xrange(i+1,L):
+            l = j -i
+            c = (f[j] - f[i])*1.0
+            rho = c/l
+            l1 = l*100.0/L
+            if op < rho + l1:
+                t1, t2 = j, i
+
+    t1, t2 = [t1], [t2]
+    '''
+    mid_result = pd.DataFrame({'predictions':predictions})
+    mid_result.to_csv('test_'+str(k)+'mid_result2.csv',index=True)
+    sub = pd.DataFrame({'t1':t1,'t2':t2})
+    save_path = 'test_'+str(k)+'_submission2.csv'
+    sub.to_csv(save_path, index=False)
+    print save_path + ' result 2 has been saved successfully!'
