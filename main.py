@@ -9,6 +9,7 @@ import pdb
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from FeatureEngineering import feature_processing
+from sklearn import linear_model
 
 trainX_file_paths = ['../data/train/12/12_data.csv','../data/train/23/23_data.csv','../data/train/29/29_data.csv']
 trainY_file_paths = ['../data/train/12/12_failureInfo.csv','../data/train/23/23_failureInfo.csv','../data/train/29/29_failureInfo.csv']
@@ -143,6 +144,7 @@ trainX_concate1 = pca.transform(trainX_concate1)
 pca.fit(trainX_concate2)
 trainX_concate2 = pca.transform(trainX_concate2)
 
+'''
 print 'Training 1st xgbclassfier ...'
 clf1 = xgb.XGBClassifier(
     #learning_rate = 0.02,
@@ -170,6 +172,13 @@ clf2 = xgb.XGBClassifier(
  objective= 'reg:logistic',
  nthread= -1,
  scale_pos_weight=1).fit(trainX_concate2, trainY_concate2)
+'''
+
+print 'Training 1st linear ridge regression clf...'
+clf1 = linear_model.Ridge(alpha=.5).fit(trainX_concate1,trainY_concate1)
+
+print 'Training 2nd linear ridge regression clf...'
+clf2 = linear_model.Ridge(alpha=.5).fit(trainX_concate2,trainY_concate2)
 
 testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
