@@ -209,7 +209,10 @@ for k in xrange(len(testX_file_paths)):
             ed = i
             break
     t2, t1 = [st+1], [ed+1]
-    
+   
+    for i in xrange(len(predictions)):
+        if predictions[i]<80.0:
+            predictions[i] = 0
 
     '''
     f = [0 for i in xrange(len(predictions))]
@@ -264,6 +267,9 @@ for k in xrange(len(testX_file_paths)):
             break
     t2, t1 = [st+1], [ed+1]
     
+    for i in xrange(len(predictions)):
+        if predictions[i]<80.0:
+            predictions[i] = 0
 
     '''
     f = [0 for i in xrange(len(predictions))]
