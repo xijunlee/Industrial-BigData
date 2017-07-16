@@ -136,6 +136,7 @@ res = xgb.cv(param,dtrain,num_boost_round,n_fold,metrics={'error'},seed=0,
 print res
 '''
 
+'''
 print 'PCA processing ...'
 nComponent = 10
 pca = PCA(n_components=nComponent)
@@ -143,6 +144,7 @@ pca.fit(trainX_concate1)
 trainX_concate1 = pca.transform(trainX_concate1)
 pca.fit(trainX_concate2)
 trainX_concate2 = pca.transform(trainX_concate2)
+'''
 
 '''
 print 'Training 1st xgbclassfier ...'
@@ -191,9 +193,11 @@ for k in xrange(len(testX_file_paths)):
 
     print 'Predicting the %d th test dataset ...'%k
     
+    '''
     pca = PCA(n_components=nComponent)
     pca.fit(testX)
     testX = pca.transform(testX)
+    '''
     predictions = clf1.predict(testX)
 
     print 'Generating submission file of the %d test dataset ...'%k
@@ -250,9 +254,11 @@ for k in xrange(len(testX_file_paths)):
 
     print 'Predicting the %d th test dataset ...'%k
     
+    '''
     pca = PCA(n_components=nComponent)
     pca.fit(testX)
     testX = pca.transform(testX)
+    '''
     predictions = clf2.predict(testX)
 
     print 'Generating submission file of the %d test dataset ...'%k
