@@ -68,7 +68,7 @@ for k in xrange(3):
         phase1 = np.linspace(0,0.5*100,positive_st)
         phase2 = np.array([0.5*100 for i in xrange(highRisk_st-positive_st)])
         phase3 = np.array([0.8*100 for i in xrange(highRisk_ed-highRisk_st)])
-        phase4 = np.linspace(0.1*100,0,trainX_df.shape[0]-highRisk_ed)
+        phase4 = np.linspace(0.8*100,100,trainX_df.shape[0]-highRisk_ed)
         
        
         '''
@@ -214,11 +214,11 @@ for k in xrange(len(testX_file_paths)):
             break
     t2, t1 = [st+1], [ed+1]
     
-    '''
+    
     for i in xrange(len(predictions)):
         if predictions[i]<80.0:
             predictions[i] = 0
-    '''
+
 
     '''
     f = [0 for i in xrange(len(predictions))]
@@ -275,11 +275,11 @@ for k in xrange(len(testX_file_paths)):
             break
     t2, t1 = [st+1], [ed+1]
     
-    '''
+    
     for i in xrange(len(predictions)):
         if predictions[i]<80.0:
             predictions[i] = 0
-    '''
+    
 
     '''
     f = [0 for i in xrange(len(predictions))]
