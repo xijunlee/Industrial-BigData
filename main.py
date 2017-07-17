@@ -177,10 +177,10 @@ clf2 = xgb.XGBClassifier(
 '''
 
 print 'Training 1st linear ridge regression clf...'
-clf1 = linear_model.Ridge(alpha=.5).fit(trainX_concate1,trainY_concate1)
+clf1 = linear_model.Ridge(alpha=.1).fit(trainX_concate1,trainY_concate1)
 
 print 'Training 2nd linear ridge regression clf...'
-clf2 = linear_model.Ridge(alpha=.5).fit(trainX_concate2,trainY_concate2)
+clf2 = linear_model.Ridge(alpha=.1).fit(trainX_concate2,trainY_concate2)
 
 testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
@@ -215,11 +215,11 @@ for k in xrange(len(trainX_file_paths)):
             break
     t2, t1 = [st+1], [ed+1]
     
-    
+    '''
     for i in xrange(len(predictions)):
         if predictions[i]<80.0:
             predictions[i] = 0
-
+    '''
 
     '''
     f = [0 for i in xrange(len(predictions))]
@@ -276,11 +276,11 @@ for k in xrange(len(trainX_file_paths)):
             break
     t2, t1 = [st+1], [ed+1]
     
-    
+    ''' 
     for i in xrange(len(predictions)):
         if predictions[i]<80.0:
             predictions[i] = 0
-    
+    '''
 
     '''
     f = [0 for i in xrange(len(predictions))]
