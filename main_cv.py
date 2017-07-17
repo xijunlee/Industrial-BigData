@@ -65,10 +65,10 @@ for k in xrange(3):
 
     if positive_st != -1:
         
-        phase1 = np.linspace(0,0.2*100,positive_st)
+        phase1 = np.linspace(0,0.5*100,positive_st)
         phase2 = np.array([0.6*100 for i in xrange(highRisk_st-positive_st)])
-        phase3 = np.array([0.9*100 for i in xrange(highRisk_ed-highRisk_st)])
-        phase4 = np.linspace(0.9*100,100,trainX_df.shape[0]-highRisk_ed)
+        phase3 = np.array([0.8*100 for i in xrange(highRisk_ed-highRisk_st)])
+        phase4 = np.linspace(0.8*100,100,trainX_df.shape[0]-highRisk_ed)
         
        
         '''
@@ -120,11 +120,13 @@ trainX_concate2 = np.concatenate((trainXs[0],trainXs[2]), axis=0)
 trainY_concate2 = np.concatenate((trainYs[0],trainYs[2]), axis=0)
 
 reg1 = linear_model.RidgeCV(alphas=np.linspace(0.1,0.9,9),cv=5)
+#reg1 = linear_model.RidgeCV(alphas=[0.9],cv=5)
 reg1.fit(trainX_concate1,trainY_concate1)
 print 'reg1 best alpha:', reg1.alpha_
 print reg1.score(trainX_concate1,trainY_concate1)
 
 reg2 = linear_model.RidgeCV(alphas=np.linspace(0.1,0.9,9),cv=5)
+#reg2 = linear_model.RidgeCV(alphas=[0.9],cv=5)
 reg2.fit(trainX_concate2,trainY_concate2)
 print 'reg2 best alpha:', reg2.alpha_
 
