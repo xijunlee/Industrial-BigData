@@ -243,7 +243,7 @@ for k in xrange(len(trainX_file_paths)):
     mid_result.to_csv('train_'+str(k)+'mid_result1.csv',index=True)
     sub = pd.DataFrame({'t1':t1,'t2':t2})
     save_path = 'train_'+str(k)+'_submission1.csv'
-    sub.to_csv(save_path, index=False)
+    #sub.to_csv(save_path, index=False)
     print save_path + ' result 1 has been saved successfully!'
 
 print 'The 2nd classifier predicting ...'
@@ -304,5 +304,5 @@ for k in xrange(len(trainX_file_paths)):
     mid_result.to_csv('train_'+str(k)+'mid_result2.csv',index=True)
     sub = pd.DataFrame({'t1':t1,'t2':t2})
     save_path = 'train_'+str(k)+'_submission2.csv'
-    sub.to_csv(save_path, index=False)
+    #sub.to_csv(save_path, index=False)
     print save_path + ' result 2 has been saved successfully!'
