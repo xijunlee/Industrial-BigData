@@ -65,8 +65,9 @@ for k in xrange(3):
 
     if positive_st != -1:
         
-        phase1 = np.linspace(0,0.5*100,positive_st)
-        phase2 = np.array([0.6*100 for i in xrange(highRisk_st-positive_st)])
+        phase1 = np.linspace(0,0.3*100,positive_st)
+        #phase2 = np.array([0.6*100 for i in xrange(highRisk_st-positive_st)])
+        phase2 = np.linspace(0.6*100, 0.8*100, highRisk_st-positive_st)
         phase3 = np.array([0.8*100 for i in xrange(highRisk_ed-highRisk_st)])
         phase4 = np.linspace(0.8*100,100,trainX_df.shape[0]-highRisk_ed)
         
@@ -177,7 +178,7 @@ clf2 = xgb.XGBClassifier(
 '''
 
 print 'Training 1st linear ridge regression clf...'
-clf1 = linear_model.Ridge(alpha=.1).fit(trainX_concate1,trainY_concate1)
+clf1 = linear_model.Ridge(alpha=.9).fit(trainX_concate1,trainY_concate1)
 
 print 'Training 2nd linear ridge regression clf...'
 clf2 = linear_model.Ridge(alpha=.1).fit(trainX_concate2,trainY_concate2)
