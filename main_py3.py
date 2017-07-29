@@ -4,7 +4,7 @@
 import pandas as pd
 import numpy as np
 #from pandas import *
-import xgboost as xgb
+#import xgboost as xgb
 import pdb
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
@@ -25,8 +25,8 @@ trainY_concate2 = np.array([])
 
 trainXs, trainYs = [], []
 
-for k in xrange(3):
-    print 'Processing the %d th training dataset...'%(k)
+for k in range(3):
+    print ('Processing the %d th training dataset...'%(k))
     trainX_df = pd.read_csv(trainX_file_paths[k])
     trainY_df = pd.read_csv(trainY_file_paths[k])
     
@@ -44,27 +44,27 @@ for k in xrange(3):
     # labeling the timestamps
     positive_st, positive_ed, highRisk_st, highRisk_ed = -1, -1, -1, -1
 
-    for i in xrange(trainX_df.shape[0]):
+    for i in range(trainX_df.shape[0]):
         if trainX_df.iat[i,0] >= t3:
             positive_st = i
             break
 
-    for i in xrange(positive_st,trainX_df.shape[0]):
+    for i in range(positive_st,trainX_df.shape[0]):
         if trainX_df.iat[i,0] >= t2:
             highRisk_st = i
             break
 
-    for i in xrange(highRisk_st,trainX_df.shape[0]):
+    for i in range(highRisk_st,trainX_df.shape[0]):
         if trainX_df.iat[i,0] >= t1:
             highRisk_ed = i-1
             break
 
-    for i in xrange(highRisk_ed,trainX_df.shape[0]):
+    for i in range(highRisk_ed,trainX_df.shape[0]):
         if trainX_df.iat[i,0] >= t0:
             positive_ed = i
             break
    
-    print 'positive_st,highRisk_st,highRisk_ed,positive_ed',positive_st,highRisk_st,highRisk_ed,positive_ed
+    print ('positive_st,highRisk_st,highRisk_ed,positive_ed',positive_st,highRisk_st,highRisk_ed,positive_ed)
 
     if positive_st != -1:
         
@@ -200,7 +200,7 @@ nn_model1 = Sequential([
 nn_model1.summary()
 nn_model1.compile(opimizer='rmsprop', loss='mse')
 
-print 'Training 1st neural network ...'
+print ('Training 1st neural network ...')
 nn_model1.fit(trainX_concate1,trainY_concate1,epochs=10,batch_size=32,verbose=1)
 
 nn_model2 = Sequential([
@@ -214,20 +214,20 @@ nn_model2 = Sequential([
 nn_model2.summary()
 nn_model2.compile(opimizer='rmsprop', loss='mse')
 
-print 'Training 2nd neural network ...'
+print ('Training 2nd neural network ...')
 nn_model2.fit(trainX_concate2,trainY_concate2,epochs=10,batch_size=32,verbose=1)
 
 testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
 
-print 'The 1st classifier predicting ...'
+print ('The 1st classifier predicting ...')
 for k in xrange(len(trainX_file_paths)):
     testX_pd = pd.read_csv(trainX_file_paths[k])
 
     # Feature processing
     testX = feature_processing(testX_pd)
 
-    print 'Predicting the %d th test dataset ...'%k
+    print ('Predicting the %d th test dataset ...'%k)
     
     '''
     pca = PCA(n_components=nComponent)
@@ -237,7 +237,7 @@ for k in xrange(len(trainX_file_paths)):
     #predictions = clf1.predict(testX)
     predictions = nn_model1.predict(testX)
 
-    print 'Generating submission file of the %d test dataset ...'%k
+    print ('Generating submission file of the %d test dataset ...'%k)
     # Generate Submission File 
     
     st, ed = -1, -1
@@ -269,6 +269,7 @@ for k in xrange(len(trainX_file_paths)):
             l = j -i
             c = (f[j] - f[i])*1.0
             rho = c/l
+from keras.layers.core as core
             l1 = l*100.0/L
             if op < rho + l1:
                 t1, t2 = j, i
@@ -280,17 +281,17 @@ for k in xrange(len(trainX_file_paths)):
     sub = pd.DataFrame({'t1':t1,'t2':t2})
     save_path = 'train_'+str(k)+'_submission1.csv'
     #sub.to_csv(save_path, index=False)
-    print save_path + ' result 1 has been saved successfully!'
+    print (save_path + ' result 1 has been saved successfully!')
 
 
-print 'The 2nd classifier predicting ...'
+print ('The 2nd classifier predicting ...')
 for k in xrange(len(trainX_file_paths)):
     testX_pd = pd.read_csv(trainX_file_paths[k])
 
     # Feature processing
     testX = feature_processing(testX_pd)
 
-    print 'Predicting the %d th test dataset ...'%k
+    print ('Predicting the %d th test dataset ...'%k)
     
     '''
     pca = PCA(n_components=nComponent)
@@ -300,7 +301,7 @@ for k in xrange(len(trainX_file_paths)):
     #predictions = clf2.predict(testX)
     predictions = nn_model2.predict(testX)
 
-    print 'Generating submission file of the %d test dataset ...'%k
+    print ('Generating submission file of the %d test dataset ...'%k)
     # Generate Submission File 
     
     st, ed = -1, -1
@@ -343,4 +344,4 @@ for k in xrange(len(trainX_file_paths)):
     sub = pd.DataFrame({'t1':t1,'t2':t2})
     save_path = 'train_'+str(k)+'_submission2.csv'
     #sub.to_csv(save_path, index=False)
-    print save_path + ' result 2 has been saved successfully!'
+    print (save_path + ' result 2 has been saved successfully!')

@@ -55,9 +55,9 @@ if __name__ == '__main__':
     for i in xrange(3):
         data_df = pd.read_csv(file_paths[i])
         data_df = feature_processing_df(data_df,nums[i])
-        print data_df.shape
+        print (data_df.shape)
         data_df.to_csv(save_paths[i],index=False)
-        print save_paths[i] + ' has been saved!'
+        print (save_paths[i] + ' has been saved!')
 
 
 
