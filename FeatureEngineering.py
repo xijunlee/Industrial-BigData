@@ -52,7 +52,7 @@ if __name__ == '__main__':
     file_paths = ['../data/train/12/12_data.csv','../data/train/23/23_data.csv','../data/train/29/29_data.csv']
     save_paths = ['12_feature_processing_result.csv','23_feature_processing_result.csv','29_feature_processing_result.csv']
     nums = [12,23,29]
-    for i in xrange(3):
+    for i in range(3):
         data_df = pd.read_csv(file_paths[i])
         data_df = feature_processing_df(data_df,nums[i])
         print (data_df.shape)

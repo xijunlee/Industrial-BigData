@@ -69,25 +69,25 @@ for k in range(3):
     if positive_st != -1:
         
         phase1 = np.linspace(0,0.3*100,positive_st)
-        #phase2 = np.array([0.6*100 for i in xrange(highRisk_st-positive_st)])
+        #phase2 = np.array([0.6*100 for i in range(highRisk_st-positive_st)])
         phase2 = np.linspace(0.6*100, 0.8*100, highRisk_st-positive_st)
-        phase3 = np.array([0.8*100 for i in xrange(highRisk_ed-highRisk_st)])
+        phase3 = np.array([0.8*100 for i in range(highRisk_ed-highRisk_st)])
         phase4 = np.linspace(0.8*100,100,trainX_df.shape[0]-highRisk_ed)
         
        
         '''
-        phase1 = np.array([0.2*100 for i in xrange(positive_st)])
-        phase2 = np.array([0.5*100 for i in xrange(highRisk_st-positive_st)])
-        phase3 = np.array([0.8*100 for i in xrange(highRisk_ed-highRisk_st)])
-        phase4 = np.array([1*100 for i in xrange(trainX_df.shape[0]-highRisk_ed)])
+        phase1 = np.array([0.2*100 for i in range(positive_st)])
+        phase2 = np.array([0.5*100 for i in range(highRisk_st-positive_st)])
+        phase3 = np.array([0.8*100 for i in range(highRisk_ed-highRisk_st)])
+        phase4 = np.array([1*100 for i in range(trainX_df.shape[0]-highRisk_ed)])
         '''
 
         trainY = np.concatenate((phase1,phase2,phase3,phase4), axis=0)
     else:
-        trainY = np.array([10 for i in xrange(trainX_df.shape[0])])
+        trainY = np.array([10 for i in range(trainX_df.shape[0])])
     '''
     trainY = []
-    for i in xrange(trainX_df.shape[0]):
+    for i in range(trainX_df.shape[0]):
         if i >= positive_st and i <= positive_ed:
             #if i >= highRisk_st:
             #    trainY.append(2)
@@ -221,7 +221,7 @@ testX_file_paths = ['../data/test/26/26_data.csv','../data/test/33/33_data.csv']
 
 
 print ('The 1st classifier predicting ...')
-for k in xrange(len(trainX_file_paths)):
+for k in range(len(trainX_file_paths)):
     testX_pd = pd.read_csv(trainX_file_paths[k])
 
     # Feature processing
@@ -241,31 +241,31 @@ for k in xrange(len(trainX_file_paths)):
     # Generate Submission File 
     
     st, ed = -1, -1
-    for i in xrange(len(predictions)):
+    for i in range(len(predictions)):
         if predictions[i] >= 50.0:
             st = i
             break
-    for i in xrange(len(predictions)-1,-1,-1):
+    for i in range(len(predictions)-1,-1,-1):
         if predictions[i] <= 80.0:
             ed = i
             break
     t2, t1 = [st+1], [ed+1]
     
     '''
-    for i in xrange(len(predictions)):
+    for i in range(len(predictions)):
         if predictions[i]<80.0:
             predictions[i] = 0
     '''
 
     '''
-    f = [0 for i in xrange(len(predictions))]
+    f = [0 for i in range(len(predictions))]
     f[0] += predictions[0]
-    for i in xrange(1,len(predictions)):
+    for i in range(1,len(predictions)):
         f[i] = f[i-1] + predictions[i]
 
     L, op, t1, t2 = len(predictions), -1, -1, -1
-    for i in xrange(L):
-        for j in xrange(i+1,L):
+    for i in range(L):
+        for j in range(i+1,L):
             l = j -i
             c = (f[j] - f[i])*1.0
             rho = c/l
@@ -285,7 +285,7 @@ from keras.layers.core as core
 
 
 print ('The 2nd classifier predicting ...')
-for k in xrange(len(trainX_file_paths)):
+for k in range(len(trainX_file_paths)):
     testX_pd = pd.read_csv(trainX_file_paths[k])
 
     # Feature processing
@@ -305,31 +305,31 @@ for k in xrange(len(trainX_file_paths)):
     # Generate Submission File 
     
     st, ed = -1, -1
-    for i in xrange(len(predictions)):
+    for i in range(len(predictions)):
         if predictions[i] >= 50.0:
             st = i
             break
-    for i in xrange(len(predictions)-1,-1,-1):
+    for i in range(len(predictions)-1,-1,-1):
         if predictions[i] <= 80.0:
             ed = i
             break
     t2, t1 = [st+1], [ed+1]
     
     ''' 
-    for i in xrange(len(predictions)):
+    for i in range(len(predictions)):
         if predictions[i]<80.0:
             predictions[i] = 0
     '''
 
     '''
-    f = [0 for i in xrange(len(predictions))]
+    f = [0 for i in range(len(predictions))]
     f[0] += predictions[0]
-    for i in xrange(1,len(predictions)):
+    for i in range(1,len(predictions)):
         f[i] = f[i-1] + predictions[i]
 
     L, op, t1, t2 = len(predictions), -1, -1, -1
-    for i in xrange(L):
-        for j in xrange(i+1,L):
+    for i in range(L):
+        for j in range(i+1,L):
             l = j -i
             c = (f[j] - f[i])*1.0
             rho = c/l
